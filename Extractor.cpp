@@ -140,7 +140,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsign
         unsigned int hash;
         vector<float> array;
         for (int x = 0; x < 400; x++) {
-                cout << "in Query for loop x = " << x << endl;
+//                cout << "in Query for loop x = " << x << endl;
                 newKP.clear();
                 newKP.push_back(keypoints.at(x));
                 detector->compute(srcImg, newKP, descriptor);
