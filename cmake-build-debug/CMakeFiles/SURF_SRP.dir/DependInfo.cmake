@@ -10,7 +10,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/main.cpp" "/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/cmake-build-debug/CMakeFiles/SURF_SRP.dir/main.cpp.o"
   "/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/srpHash.cpp" "/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/cmake-build-debug/CMakeFiles/SURF_SRP.dir/srpHash.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "AppleClang")
+set(CMAKE_CXX_COMPILER_ID "Clang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

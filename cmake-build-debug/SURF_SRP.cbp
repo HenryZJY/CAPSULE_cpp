@@ -4,7 +4,7 @@
 	<Project>
 		<Option title="SURF_SRP"/>
 		<Option makefile_is_custom="1"/>
-		<Option compiler="gcc"/>
+		<Option compiler="clang"/>
 		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\OpenCV\;CMake Files\..\OpenCV\build_nonfree_opencv\;"/>
 		<Build>
 			<Target title="all">
@@ -42,7 +42,7 @@
 				<Option working_dir="/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
-				<Option compiler="gcc"/>
+				<Option compiler="clang"/>
 				<Compiler>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/usr/local/opt/llvm/include"/>
@@ -99,11 +99,10 @@
 					<Add directory="/Users/henryzjy/Desktop/Projects/OpenCV/opencv_contrib/modules/superres/include"/>
 					<Add directory="/Users/henryzjy/Desktop/Projects/OpenCV/opencv_contrib/modules/tracking/include"/>
 					<Add directory="/Users/henryzjy/Desktop/Projects/OpenCV/opencv_contrib/modules/stereo/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
-					<Add directory="/System/Library/Frameworks"/>
-					<Add directory="/Library/Frameworks"/>
+					<Add directory="/usr/local/opt/llvm/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/Cellar/llvm/10.0.0_3/lib/clang/10.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -j16 -f &quot;/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/cmake-build-debug/Makefile&quot;  VERBOSE=1 SURF_SRP"/>
@@ -117,7 +116,7 @@
 				<Option working_dir="/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
-				<Option compiler="gcc"/>
+				<Option compiler="clang"/>
 				<Compiler>
 					<Add directory="/usr/local/include"/>
 					<Add directory="/usr/local/opt/llvm/include"/>
@@ -174,11 +173,10 @@
 					<Add directory="/Users/henryzjy/Desktop/Projects/OpenCV/opencv_contrib/modules/superres/include"/>
 					<Add directory="/Users/henryzjy/Desktop/Projects/OpenCV/opencv_contrib/modules/tracking/include"/>
 					<Add directory="/Users/henryzjy/Desktop/Projects/OpenCV/opencv_contrib/modules/stereo/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
-					<Add directory="/System/Library/Frameworks"/>
-					<Add directory="/Library/Frameworks"/>
+					<Add directory="/usr/local/opt/llvm/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/Cellar/llvm/10.0.0_3/lib/clang/10.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -j16 -f &quot;/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/cmake-build-debug/Makefile&quot;  VERBOSE=1 SURF_SRP/fast"/>
