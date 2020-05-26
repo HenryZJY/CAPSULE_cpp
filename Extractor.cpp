@@ -165,7 +165,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsign
                                 // Convert to an interger
                                 hash += hashes[x] * pow(2, (_srp->_numhashes - x - 1));
                         }
-                        query[x*4 + m] = hash;
+                        query[x*_L + m] = hash;
 //                        cout << "Query insert successful" << endl;
                         delete(_srp);
                 }
