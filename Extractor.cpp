@@ -79,23 +79,21 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 //                for (auto i : array) {
 //                        cout << i << ", ";
 //                }
-//                cout << endl;
 //                cout << "\nArray size:" << array.size() << endl;
 
                 // Step 3: Hash each 128-dimensional feature here
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
                         srpHash *_srp = new srpHash(128, _K, 1);
-                        unsigned int *hashes = _srp->getHash(array, 128);
+                        unsigned int *hashes = _srp->getHash(array, 10);
                         hash = 0;
 //                        cout << "srp address: " << _srp << endl;
 //                        cout << "hash address: " << hashes << endl;
                         for (int x = 0; x < _srp->_numhashes; x++) {
-//                                cout << hashes[x];
                                 // Convert to an interger
                                 hash += hashes[x] * pow(2, (_srp->_numhashes - x - 1));
                         }
                         hashlst[m] = hash;
-//                        cout << endl << "Hash value: " << hash << endl;
+//                        cout << "Hash value: " << hash << endl;
                         delete(_srp);
                         delete [] hashes;
                 }
@@ -151,11 +149,10 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsign
                         array.clear();
                         array.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
                 }
-//                for (auto i : array) {
-//                        cout << i << ", ";
-//                }
-//                cout << "\nArray size:" << array.size() << endl;
-//                cout << "ha" << endl;
+                //                for (auto i : array) {
+                //                        cout << i << ", ";
+                //                }
+                //                cout << "\nArray size:" << array.size() << endl;
 
                 // Step 3: Hash each 128-dimensional feature here
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
@@ -164,20 +161,18 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsign
                         hash = 0;
                         //                        cout << "srp address: " << _srp << endl;
                         //                        cout << "hash address: " << hashes << endl;
-                        for (int i = 0; i < _srp->_numhashes; i++) {
+                        for (int x = 0; x < _srp->_numhashes; x++) {
                                 // Convert to an interger
-                                hash += hashes[i] * pow(2, (_srp->_numhashes - i - 1));
+                                hash += hashes[x] * pow(2, (_srp->_numhashes - x - 1));
                         }
                         query[x*4 + m] = hash;
+//                        cout << "Query insert successful" << endl;
                         delete(_srp);
-                        delete [] hashes;
                 }
         }
         //                for (int i = 0; i < _L * _K; i++)
         //                        cout << query[i] << " ";
-        cout << "before top k" << endl;
         _lsh->top_k(400, top_k, query, result);
-        cout << "Query complete" << endl;
         delete [] query;
         return 0;
 }
