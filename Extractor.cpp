@@ -66,7 +66,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
         unsigned int hash;
         vector<float> array;
         for (int x = 0; x < 400; x++) {
-                if (x % 100 == 0)
+                if (x % 200 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
                 newKP.clear();
                 newKP.push_back(keypoints.at(x));
