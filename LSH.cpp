@@ -119,7 +119,7 @@ void LSH::reset() {
 void LSH::view() {
         for (size_t t = 0; t < L; t++) {
                 printf("LSH Table %lu\n", t);
-                for (size_t r = 0; r < range; r++) {
+                for (size_t r = 0; r < SHOWRANGE; r++) {
                         reservoirs[t][r].view();
                 }
                 printf("\n");

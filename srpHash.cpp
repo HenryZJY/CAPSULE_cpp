@@ -27,6 +27,8 @@ srpHash::srpHash(size_t dimension, size_t numOfHashes, int ratio) {
 
         auto rd = std::random_device{};
         auto rng = default_random_engine {rd()};
+        mt19937 mt(rd());
+        uniform_int_distribution<int> dist(0, numeric_limits<int>::max());
         for (size_t i = 0; i < _numhashes; i++) {
                 shuffle(a, a+_dim, rng);
 //                cout << "a[i] is " << a[i] << endl;
@@ -34,7 +36,8 @@ srpHash::srpHash(size_t dimension, size_t numOfHashes, int ratio) {
                 _indices[i] = new int[_samSize];
                 for (size_t j = 0; j < _samSize; j++) {
                         _indices[i][j] = a[j];
-                        int curr = random();
+                        int curr = dist(mt);
+//                        int curr = random();
                         if (curr % 2 == 0) {
                                 _randBits[i][j] = 1;
                         } else {

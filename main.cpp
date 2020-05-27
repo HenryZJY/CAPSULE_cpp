@@ -100,9 +100,9 @@ unsigned int *print_N_mostFrequentNumber(unsigned int arr[], int n, int k)
         sort(freq_arr.begin(), freq_arr.end(), comparePair());
 
         // display the top k numbers
-//        cout << k << " numbers with most occurrences are:\n";
+        cout <<  " numbers of the most occurrences are:\n";
         for (int i = 0; i<k; i++) {
-//                cout << freq_arr[i].first << " ";
+                cout << freq_arr[i].second << " ";
                 result_arr[i] = freq_arr[i].first;
         }
          return result_arr;
@@ -114,7 +114,7 @@ main() {
 
         int n = 5;
         LSH *lsh = new LSH();
-        vector<string> files = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/small/*/*.jpg");
+        vector<string> files = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/test/*/*.jpg");
         Extractor extractor = Extractor(RANGE_POW, lsh, NUM_TABLES);
         unordered_map<int, string> umap;        // Mapping img ids with img names.
         unsigned int x = 0;
@@ -129,11 +129,11 @@ main() {
         // Query
         vector<string> queries = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/query/*.jpg");
         for (auto query : queries) {
-                unsigned int *r = new unsigned int[1200]; // 400 Features, find top-3 neighbors for each feature
+                unsigned int *r = new unsigned int[2400]; // 400 Features, find top-6 neighbors for each feature
                 cout << "Querying " << query << endl;
-                extractor.query(query, 3, r);
+                extractor.query(query, 6, r);
 
-                auto top_k = print_N_mostFrequentNumber(r, 1200, n);
+                auto top_k = print_N_mostFrequentNumber(r, 2400, n);
                 for (int i = 0; i < n; i++) {
                         cout << umap[top_k[i]] << endl;
                 }

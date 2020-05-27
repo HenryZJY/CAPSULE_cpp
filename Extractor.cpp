@@ -168,11 +168,12 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsign
                         query[x*_L + m] = hash;
 //                        cout << "Query insert successful" << endl;
                         delete(_srp);
+                        delete [] hashes;
                 }
         }
         //                for (int i = 0; i < _L * _K; i++)
         //                        cout << query[i] << " ";
-        cout << "before top_k" << endl;
+//        cout << "before top_k" << endl;
         _lsh->top_k(400, top_k, query, result);
         delete [] query;
         return 0;
