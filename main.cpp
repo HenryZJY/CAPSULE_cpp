@@ -75,11 +75,11 @@ struct comparePair
                 // if frequencies of two elements are same
                 // then the larger number should come first
                 if (p1.second == p2.second)
-                        return p1.first < p2.first;
+                        return p1.first > p2.first;
 
                 // insert elements in the priority queue on the basis of
                 // decreasing order of frequencies
-                return p1.second < p2.second;
+                return p1.second > p2.second;
         }
 };
 
@@ -137,6 +137,7 @@ main() {
                 for (int i = 0; i < n; i++) {
                         cout << umap[top_k[i]] << endl;
                 }
+                cout << endl;
                 delete [] r;
         }
 
