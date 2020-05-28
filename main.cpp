@@ -114,7 +114,7 @@ main() {
 
         int n = 5;
         LSH *lsh = new LSH();
-        vector<string> files = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/small/*/*.jpg");
+        vector<string> files = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/test/*/*.jpg");
         Extractor extractor = Extractor(RANGE_POW, lsh, NUM_TABLES);
         unordered_map<int, string> umap;        // Mapping img ids with img names.
         unsigned int x = 0;
@@ -127,6 +127,7 @@ main() {
         lsh->view();
 
         // Query
+        umap[-1] = "BOOM";
         vector<string> queries = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/query/*.jpg");
         for (auto query : queries) {
                 unsigned int match;
@@ -137,7 +138,7 @@ main() {
 //                        cout << umap[top_k[i]] << endl;
 //                }
                 cout << "Querying " << query << endl;
-                if ((match = extractor.query(query, 10)) != -1) {
+                if ((match = extractor.query(query, 50)) != -1) {
                         cout << "Match is " << umap[match] << endl;
                         cout << endl;
                 }
