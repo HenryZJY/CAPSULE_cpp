@@ -111,7 +111,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
         return 0;
 }
 
-unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsigned int *result) {
+unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
         // Step 1: Detect the keypoints using SURF Detector
         //        double minHessian = 250;
         //        Ptr<SURF> detector = SURF::create(minHessian);
@@ -135,7 +135,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsign
         // Case when enough KeyPoints
         vector<KeyPoint> newKP;
         Mat descriptor;
-        unsigned int *query = new unsigned int[_L * 400];
+
         //        unsigned int *hashes;
         unsigned int hash;
         vector<float> array;
@@ -155,6 +155,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsign
                 //                cout << "\nArray size:" << array.size() << endl;
 
                 // Step 3: Hash each 128-dimensional feature here
+                unsigned int *query = new unsigned int[_L];
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
                         srpHash *_srp = new srpHash(128, _K, 1);
                         unsigned int *hashes = _srp->getHash(array, 400);
@@ -165,18 +166,32 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k, unsign
                                 // Convert to an interger
                                 hash += hashes[x] * pow(2, (_srp->_numhashes - x - 1));
                         }
-                        query[x*_L + m] = hash;
+                        query[m] = hash;
 //                        cout << "Query insert successful" << endl;
                         delete(_srp);
                         delete [] hashes;
                 }
+                unsigned int *result = new unsigned int[top_k];
+                _lsh->top_k(1, top_k, query, result);
+                // Step 4: Update the score of the nearest neighbors.
+                for (int i = 0; i < top_k; ++i) {
+                        if (_score.count(result[i]) == 0) {
+                                _score[result[i]] = 0;
+                        }
+                        else {
+                                _score[result[i]] ++;
+                        }
+                }
+                delete [] query;
+                delete [] result;
         }
-        //                for (int i = 0; i < _L * _K; i++)
-        //                        cout << query[i] << " ";
-//        cout << "before top_k" << endl;
-        _lsh->top_k(400, top_k, query, result);
-        delete [] query;
-        return 0;
+        // Sort the score map
+        vector<pair<int, int> > freq_arr(_score.begin(), _score.end());
+        sort(freq_arr.begin(), freq_arr.end(), comparePair());
+
+        _score.clear();
+        cout << "Most match times are" << freq_arr[0].second << endl;
+        return freq_arr[0].first;
 }
 
 Extractor::~Extractor() {
