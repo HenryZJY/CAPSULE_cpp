@@ -43,8 +43,8 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 
         // Step 2: Compute feature
         // Case when NOT enough KeyPoints
-        if (numPoints < 400) {
-                cout << "No 400 keypoints available" << endl;
+        if (numPoints < 450) {
+                cout << "No 450 keypoints available" << endl;
                 return -1;
         }
         // Case when enough KeyPoints
@@ -65,7 +65,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 //        unsigned int *hashes;
         unsigned int hash;
         vector<float> array;
-        for (int x = 0; x < 400; x++) {
+        for (int x = 0; x < 450; x++) {
                 if (x % 200 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
                 newKP.clear();
@@ -84,7 +84,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
                 // Step 3: Hash each 128-dimensional feature here
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
                         srpHash *_srp = new srpHash(128, _K, 1);
-                        unsigned int *hashes = _srp->getHash(array, 10);
+                        unsigned int *hashes = _srp->getHash(array, 450);
                         hash = 0;
 //                        cout << "srp address: " << _srp << endl;
 //                        cout << "hash address: " << hashes << endl;
@@ -127,8 +127,8 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
 
         // Step 2: Compute feature
         // Case when NOT enough KeyPoints
-        if (numPoints < 400) {
-                cout << "Query No 400 keypoints available" << endl;
+        if (numPoints < 450) {
+                cout << "Query No 450 keypoints available" << endl;
                 return -1;
         }
 
@@ -139,7 +139,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
         //        unsigned int *hashes;
         unsigned int hash;
         vector<float> array;
-        for (int x = 0; x < 400; x++) {
+        for (int x = 0; x < 450; x++) {
 //                cout << "in Query for loop x = " << x << endl;
                 newKP.clear();
                 newKP.push_back(keypoints.at(x));
@@ -158,7 +158,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
                 unsigned int *query = new unsigned int[_L];
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
                         srpHash *_srp = new srpHash(128, _K, 1);
-                        unsigned int *hashes = _srp->getHash(array, 400);
+                        unsigned int *hashes = _srp->getHash(array, 450);
                         hash = 0;
                         //                        cout << "srp address: " << _srp << endl;
                         //                        cout << "hash address: " << hashes << endl;

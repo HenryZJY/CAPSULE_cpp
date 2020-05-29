@@ -138,7 +138,7 @@ main() {
 //                        cout << umap[top_k[i]] << endl;
 //                }
                 cout << "Querying " << query << endl;
-                if ((match = extractor.query(query, 22)) != -1) {
+                if ((match = extractor.query(query, 15)) != -1) {
                         cout << "Match is " << umap[match] << endl;
                         cout << endl;
                 }
