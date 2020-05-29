@@ -190,7 +190,9 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
         sort(freq_arr.begin(), freq_arr.end(), comparePair());
 
         _score.clear();
-        cout << "Most match times are" << freq_arr[0].second << endl;
+        if (freq_arr[0].first == -1)
+                return freq_arr[1].first;
+        cout << "Most match score is: " << freq_arr[0].second << endl;
         return freq_arr[0].first;
 }
 
