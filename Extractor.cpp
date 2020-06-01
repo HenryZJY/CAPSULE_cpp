@@ -61,43 +61,50 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 //        shuffle(arr.begin(), arr.end(), rng);
 
         Mat descriptor;
-        vector<float> featureMT;
+        vector<vector<float>> featureMT;
         detector->compute(srcImg, keypoints, descriptor);
-        cout << "Descriptor rows" << descriptor.rows << endl;
+        descriptor.row(0);
         if(descriptor.isContinuous()) {
-                featureMT.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
+                for (int l = 0; l < 450; l++) {
+                        vector<float> row;
+                        row.assign((float*)descriptor.row(l).data, (float*)descriptor.row(l).data + 128);
+                        featureMT.push_back(row);
+                }
+
         }
-        cout << "Converted vector : ";
-        for (auto i : featureMT) {
-                cout << i << " ";
-        }
-        cout << endl;
+//        cout << "Original descriptor: "<< descriptor;
+//        cout << "Converted vector : ";
+//        for (auto i : featureMT) {
+//                cout << i << " ";
+//        }
+//        cout << endl;
 
         vector<KeyPoint> newKP;
 
         unsigned int *hashlst = new unsigned int[_L];
 //        unsigned int *hashes;
         unsigned int hash;
-        vector<float> array;
+
         for (int x = 0; x < 10; x++) {
                 if (x % 200 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
 
                 // Old way of computing each keypoints separately
-                newKP.clear();
-                newKP.push_back(keypoints.at(x));
-                detector->compute(srcImg, newKP, descriptor);
-                if (descriptor.isContinuous()) {
-                        array.clear();
-                        array.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
-                }
+//                newKP.clear();
+//                newKP.push_back(keypoints.at(x));
+//                detector->compute(srcImg, newKP, descriptor);
+//                if (descriptor.isContinuous()) {
+//                        array.clear();
+//                        array.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
+//                }
                 // End of Old way
 
-//                cout << "Single vector here: ";
-//                for (auto i : array) {
-//                        cout << i << ", ";
-//                }
-//                cout << endl;
+                vector<float> array = featureMT.at(x);
+                cout << "Single vector here: ";
+                for (auto i : array) {
+                        cout << i << ", ";
+                }
+                cout << endl << " Vector Size: " <<array.size() << endl;
 
                 // Step 3: Hash each 128-dimensional feature here
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
@@ -107,16 +114,17 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 
                         for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-                                hash += hashes[n] * pow(2, (_srp->_numhashes - x - 1));
+//                                cout << hashes[n] << " ";
+                                hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
                         }
                         hashlst[m] = hash;
-//                        cout << "Hash value: " << hash << endl;
                         delete(_srp);
                         delete [] hashes;
                 }
-//                for (int i = 0; i < _L; i++)
-//                        cout << hashlst[i] << " ";
-//                cout << endl;
+                for (int i = 0; i < _L; i++)
+                        cout << hashlst[i] << " ";
+                cout << endl;
+//                cout << "Before inserting " << endl;
                 _lsh ->insert(imgID, hashlst);
 //                cout << "lsh insert successful" << endl;
         }
