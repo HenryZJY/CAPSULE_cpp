@@ -17,20 +17,42 @@ Extractor::Extractor(int numHashes, LSH *lsh, unsigned int L ) {
 }
 
 
-unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgID) {
+unsigned int Extractor::compute(vector<string> files) {
         // Step 1: Detect the keypoints using SURF Detector
         //        double minHessian = 250;
         //        Ptr<SURF> detector = SURF::create(minHessian);
-        Mat srcImg = imread(samples::findFile(filePath), IMREAD_COLOR);
-        if (srcImg.empty()) {
-                std::cout << "Could not open or find the image!\n" << std::endl;
-                exit(-1);
+        unsigned int id = 0;
+        for (auto filePath : files) {
+                _namemap[id] = filePath;
+
+                Mat srcImg = imread(samples::findFile(filePath), IMREAD_COLOR);
+                if (srcImg.empty()) {
+                        std::cout << "Could not open or find the image!\n" << std::endl;
+                        exit(-1);
+                }
+                std::vector<KeyPoint> keypoints;
+                detector->detect(srcImg, keypoints);
+                int numPoints = keypoints.size();
+                cout << keypoints.size();
+
+                if (numPoints < 450) {
+                        cout << "No 450 keypoints available" << endl;
+                        continue;
+                }
+
+                Mat descriptor;
+                detector->compute(srcImg, keypoints, descriptor);
+                descriptor.row(0);
+                if(descriptor.isContinuous()) {
+                        for (int l = 0; l < 450; l++) {
+                                vector<float> row;
+                                row.assign((float*)descriptor.row(l).data, (float*)descriptor.row(l).data + 128);
+//                                _vecmap[row] = id;
+                                _featureMT.push_back(row);
+                        }
+                }
+                id += 1;
         }
-        std::vector<KeyPoint> keypoints;
-
-        detector->detect(srcImg, keypoints);
-        int numPoints = keypoints.size();
-
 //        cout << numPoints << endl;
 
         // Draw keypoints
@@ -44,10 +66,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 
         // Step 2: Compute feature
         // Case when NOT enough KeyPoints
-        if (numPoints < 450) {
-                cout << "No 450 keypoints available" << endl;
-                return -1;
-        }
+
 
         // Case when enough KeyPoints
         // Vector for random selection
@@ -60,17 +79,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 //        }
 //        shuffle(arr.begin(), arr.end(), rng);
 
-        Mat descriptor;
 
-        detector->compute(srcImg, keypoints, descriptor);
-        descriptor.row(0);
-        if(descriptor.isContinuous()) {
-                for (int l = 0; l < 450; l++) {
-                        vector<float> row;
-                        row.assign((float*)descriptor.row(l).data, (float*)descriptor.row(l).data + 128);
-                        _featureMT.push_back(row);
-                }
-        }
         // Calculate mean vector to center the data
 
 //        cout << "Original descriptor: "<< descriptor;
@@ -89,7 +98,7 @@ unsigned int Extractor::preprocessing() {
 
         for (int x = 0; x < 10; x++) {
                 vector<float> array = _featureMT.at(x);
-                unsigned int imgID =  _vecmap[array];
+                unsigned int imgID =  0;
                 if (x % 200 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
 
@@ -132,6 +141,7 @@ unsigned int Extractor::preprocessing() {
                 _lsh ->insert(imgID, hashlst);
                 //                cout << "lsh insert successful" << endl;
         }
+        return 0;
 }
 
 unsigned int Extractor::query(const String &filePath, unsigned int top_k) {

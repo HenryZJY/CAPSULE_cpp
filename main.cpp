@@ -117,18 +117,13 @@ main() {
         vector<string> files = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/test/*/*.jpg");
         cout << files.size() << endl;
         Extractor extractor = Extractor(RANGE_POW, lsh, NUM_TABLES);
-        unordered_map<int, string> umap;        // Mapping img ids with img names.
-        unsigned int x = 0;
-        for (auto img : files) {
-                umap[x] = img;
-                int result = extractor.computeAndHash(img, x);
-                x += 1;
-//                cout << "result" << result << endl;
-        }
+        unsigned int result = extractor.compute(files);
+        extractor.preprocessing();
+
         lsh->view();
 
         // Query
-        umap[-1] = "BOOM";
+        extractor._namemap[-1] = "BOOM";
         vector<string> queries = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/query/*.jpg");
         for (auto query : queries) {
                 unsigned int match;
