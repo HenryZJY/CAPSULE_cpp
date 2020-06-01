@@ -7,5 +7,6 @@
 
 #define POW 8192
 #define SHOWRANGE 100
+#define NIMAGES 184
 
 

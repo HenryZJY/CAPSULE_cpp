@@ -41,19 +41,20 @@ private:
     int _K;
     Ptr<SIFT> detector = SIFT::create(450);
     unsigned int _L;
+    unordered_map<vector<float>, int> _vecmap;
 
 public:
     LSH *_lsh;
     unordered_map<int, int> _score;
+    vector<vector<float>> _featureMT;
     /*Constructor */
     explicit Extractor(int numHashes, LSH *lsh, unsigned int L );
 
 
     unsigned int computeAndHash(const String& filePath, unsigned int imgID);
 
-    /*
-     * result must be a top-k * numOfQuery length array.
-     */
+    unsigned int preprocessing();
+
     unsigned int query(const String& filePath, unsigned int top_k);
     ~Extractor();
 };

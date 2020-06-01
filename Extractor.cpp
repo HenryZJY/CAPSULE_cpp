@@ -61,17 +61,18 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 //        shuffle(arr.begin(), arr.end(), rng);
 
         Mat descriptor;
-        vector<vector<float>> featureMT;
+
         detector->compute(srcImg, keypoints, descriptor);
         descriptor.row(0);
         if(descriptor.isContinuous()) {
                 for (int l = 0; l < 450; l++) {
                         vector<float> row;
                         row.assign((float*)descriptor.row(l).data, (float*)descriptor.row(l).data + 128);
-                        featureMT.push_back(row);
+                        _featureMT.push_back(row);
                 }
-
         }
+        // Calculate mean vector to center the data
+
 //        cout << "Original descriptor: "<< descriptor;
 //        cout << "Converted vector : ";
 //        for (auto i : featureMT) {
@@ -79,27 +80,30 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 //        }
 //        cout << endl;
 
-        vector<KeyPoint> newKP;
+        return 0;
+}
 
+unsigned int Extractor::preprocessing() {
         unsigned int *hashlst = new unsigned int[_L];
-//        unsigned int *hashes;
         unsigned int hash;
 
         for (int x = 0; x < 10; x++) {
+                vector<float> array = _featureMT.at(x);
+                unsigned int imgID =  _vecmap[array];
                 if (x % 200 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
 
                 // Old way of computing each keypoints separately
-//                newKP.clear();
-//                newKP.push_back(keypoints.at(x));
-//                detector->compute(srcImg, newKP, descriptor);
-//                if (descriptor.isContinuous()) {
-//                        array.clear();
-//                        array.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
-//                }
+                //                newKP.clear();
+                //                newKP.push_back(keypoints.at(x));
+                //                detector->compute(srcImg, newKP, descriptor);
+                //                if (descriptor.isContinuous()) {
+                //                        array.clear();
+                //                        array.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
+                //                }
                 // End of Old way
 
-                vector<float> array = featureMT.at(x);
+
                 cout << "Single vector here: ";
                 for (auto i : array) {
                         cout << i << ", ";
@@ -114,7 +118,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 
                         for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-//                                cout << hashes[n] << " ";
+                                //                                cout << hashes[n] << " ";
                                 hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
                         }
                         hashlst[m] = hash;
@@ -124,16 +128,10 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
                 for (int i = 0; i < _L; i++)
                         cout << hashlst[i] << " ";
                 cout << endl;
-//                cout << "Before inserting " << endl;
+                //                cout << "Before inserting " << endl;
                 _lsh ->insert(imgID, hashlst);
-//                cout << "lsh insert successful" << endl;
+                //                cout << "lsh insert successful" << endl;
         }
-//        cout << "Descriptor:\n" << descriptor;
-//        cout << "\nDescriptor size:" << descriptor.size() << endl;
-//        cout << "Descriptor type:" << descriptor.type() << endl;
-
-
-        return 0;
 }
 
 unsigned int Extractor::query(const String &filePath, unsigned int top_k) {

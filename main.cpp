@@ -115,6 +115,7 @@ main() {
         int n = 5;
         LSH *lsh = new LSH();
         vector<string> files = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/test/*/*.jpg");
+        cout << files.size() << endl;
         Extractor extractor = Extractor(RANGE_POW, lsh, NUM_TABLES);
         unordered_map<int, string> umap;        // Mapping img ids with img names.
         unsigned int x = 0;
