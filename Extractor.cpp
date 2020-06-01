@@ -30,6 +30,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 
         detector->detect(srcImg, keypoints);
         int numPoints = keypoints.size();
+
 //        cout << numPoints << endl;
 
         // Draw keypoints
@@ -47,6 +48,7 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
                 cout << "No 450 keypoints available" << endl;
                 return -1;
         }
+
         // Case when enough KeyPoints
         // Vector for random selection
 //        auto rd = std::random_device {};
@@ -58,39 +60,54 @@ unsigned int Extractor::computeAndHash(const String& filePath, unsigned int imgI
 //        }
 //        shuffle(arr.begin(), arr.end(), rng);
 
-        // Now compute descriptor (feature) for each KeyPoint.
-        vector<KeyPoint> newKP;
         Mat descriptor;
+        vector<float> featureMT;
+        detector->compute(srcImg, keypoints, descriptor);
+        cout << "Descriptor rows" << descriptor.rows << endl;
+        if(descriptor.isContinuous()) {
+                featureMT.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
+        }
+        cout << "Converted vector : ";
+        for (auto i : featureMT) {
+                cout << i << " ";
+        }
+        cout << endl;
+
+        vector<KeyPoint> newKP;
+
         unsigned int *hashlst = new unsigned int[_L];
 //        unsigned int *hashes;
         unsigned int hash;
         vector<float> array;
-        for (int x = 0; x < 450; x++) {
+        for (int x = 0; x < 10; x++) {
                 if (x % 200 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
+
+                // Old way of computing each keypoints separately
                 newKP.clear();
                 newKP.push_back(keypoints.at(x));
                 detector->compute(srcImg, newKP, descriptor);
-
                 if (descriptor.isContinuous()) {
                         array.clear();
                         array.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
                 }
+                // End of Old way
+
+//                cout << "Single vector here: ";
 //                for (auto i : array) {
 //                        cout << i << ", ";
 //                }
-//                cout << "\nArray size:" << array.size() << endl;
+//                cout << endl;
 
                 // Step 3: Hash each 128-dimensional feature here
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
                         srpHash *_srp = new srpHash(128, _K, 1);
                         unsigned int *hashes = _srp->getHash(array, 450);
                         hash = 0;
-//                        cout << "srp address: " << _srp << endl;
-//                        cout << "hash address: " << hashes << endl;
-                        for (int x = 0; x < _srp->_numhashes; x++) {
+
+                        for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-                                hash += hashes[x] * pow(2, (_srp->_numhashes - x - 1));
+                                hash += hashes[n] * pow(2, (_srp->_numhashes - x - 1));
                         }
                         hashlst[m] = hash;
 //                        cout << "Hash value: " << hash << endl;

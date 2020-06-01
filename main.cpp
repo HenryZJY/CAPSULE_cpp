@@ -131,17 +131,19 @@ main() {
         vector<string> queries = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/query/*.jpg");
         for (auto query : queries) {
                 unsigned int match;
+
 //                unsigned int *r = new unsigned int[2400]; // 400 Features, find top-6 neighbors for each feature
 
 //                auto top_k = print_N_mostFrequentNumber(r, 2400, n);
 //                for (int i = 0; i < n; i++) {
 //                        cout << umap[top_k[i]] << endl;
 //                }
-                cout << "Querying " << query << endl;
-                if ((match = extractor.query(query, 15)) != -1) {
-                        cout << "Match is " << umap[match] << endl;
-                        cout << endl;
-                }
+
+//                cout << "Querying " << query << endl;
+//                if ((match = extractor.query(query, 20)) != -1) {
+//                        cout << "Match is " << umap[match] << endl;
+//                        cout << endl;
+//                }
         }
 
         return 0;

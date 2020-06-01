@@ -39,7 +39,7 @@ struct comparePair
 class Extractor {
 private:
     int _K;
-    Ptr<SIFT> detector = SIFT::create(400);
+    Ptr<SIFT> detector = SIFT::create(450);
     unsigned int _L;
 
 public:
