@@ -36,11 +36,13 @@ struct comparePair
         }
 };
 
+
 class Extractor {
 private:
     int _K;
     Ptr<SIFT> detector = SIFT::create(450);
     unsigned int _L;
+    vector<float> _meanvec;     // The mean vector
 //    unordered_map<vector<float>, int> _vecmap;
 
 public:
@@ -57,6 +59,20 @@ public:
     unsigned int preprocessing();
 
     unsigned int query(const String& filePath, unsigned int top_k);
+
+    /*
+    * vector1 and vector2 must have the same size, n.
+    */
+    static vector<float> vecminus(vector<float> vector1, vector<float> vector2, unsigned int size) {
+            assert(vector1.size() == size && vector2.size() == size);
+            vector<float> result;
+            result.reserve(size);
+            for (int i = 0; i < size; ++i) {
+                    result.push_back((vector1.at(i) - vector2.at(i)));
+            }
+            return result;
+    }
+
     ~Extractor();
 };
 

@@ -22,6 +22,10 @@ unsigned int Extractor::compute(vector<string> files) {
         //        double minHessian = 250;
         //        Ptr<SURF> detector = SURF::create(minHessian);
         unsigned int id = 0;
+        float *sumvec = new float[128];
+        for (int i = 0; i < 128; ++i) {
+                sumvec[i] = 0;
+        }
         for (auto filePath : files) {
                 _namemap[id] = filePath;
 
@@ -40,14 +44,19 @@ unsigned int Extractor::compute(vector<string> files) {
                         continue;
                 }
 
+                // Step 2: Compute feature
                 Mat descriptor;
                 detector->compute(srcImg, keypoints, descriptor);
                 descriptor.row(0);
                 id += 1;
+                cout << "Storing id is "<< id << endl;
                 if(descriptor.isContinuous()) {
                         for (int l = 0; l < 450; l++) {
                                 vector<float> row;
                                 row.assign((float*)descriptor.row(l).data, (float*)descriptor.row(l).data + 128);
+                                for (int j = 0; j < 128; ++j) {
+                                        sumvec[j] += row.at(j);
+                                }
                                 // Store the id of the image at the end of each vector.
                                 row.push_back(id);
                                 _featureMT.push_back(row);
@@ -55,6 +64,16 @@ unsigned int Extractor::compute(vector<string> files) {
                 }
 
         }
+
+        cout << "Compute Done with " << id << " images" << endl;
+        // Calculate the mean vector
+        for (int k = 0; k < 128; ++k) {
+                _meanvec.push_back(sumvec[k] / _featureMT.size());
+        }
+//        cout << "Feature matrix size is " << _featureMT.size() << endl;
+
+
+        return 0;
 //        cout << numPoints << endl;
 
         // Draw keypoints
@@ -66,7 +85,6 @@ unsigned int Extractor::compute(vector<string> files) {
         //
         //        waitKey();
 
-        // Step 2: Compute feature
         // Case when NOT enough KeyPoints
 
 
@@ -90,8 +108,7 @@ unsigned int Extractor::compute(vector<string> files) {
 //                cout << i << " ";
 //        }
 //        cout << endl;
-        cout << "Compute Done with " << id << " images" << endl;
-        return 0;
+
 }
 
 unsigned int Extractor::preprocessing() {
@@ -103,6 +120,7 @@ unsigned int Extractor::preprocessing() {
                 // Find and remove the image ID
                 unsigned int imgID = array.back();
                 array.pop_back();
+                array = vecminus(array, _meanvec, 128);
                 if (x % 200 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
 
@@ -131,17 +149,18 @@ unsigned int Extractor::preprocessing() {
 
                         for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-                                //                                cout << hashes[n] << " ";
+                                cout << hashes[n] << "";
                                 hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
                         }
                         hashlst[m] = hash;
                         delete(_srp);
                         delete [] hashes;
+                        cout << "----";
                 }
-                for (int i = 0; i < _L; i++)
-                        cout << hashlst[i] << " ";
+//                for (int i = 0; i < _L; i++)
+//                        cout << hashlst[i] << " ";
                 cout << endl;
-                cout << "Inserting image: " << imgID << endl;
+//                cout << "Inserting image: " << imgID << endl;
                 _lsh ->insert(imgID, hashlst);
                 //                cout << "lsh insert successful" << endl;
         }
