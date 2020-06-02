@@ -115,7 +115,7 @@ unsigned int Extractor::preprocessing() {
         unsigned int *hashlst = new unsigned int[_L];
         unsigned int hash;
 
-        for (int x = 0; x < 10; x++) {
+        for (int x = 0; x < _featureMT.size(); x++) {
                 vector<float> array = _featureMT.at(x);
                 // Find and remove the image ID
                 unsigned int imgID = array.back();
@@ -189,22 +189,23 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
         }
 
         // Case when enough KeyPoints
-        vector<KeyPoint> newKP;
+        vector<vector<float>> queryvec;
         Mat descriptor;
+        detector->compute(srcImg, keypoints, descriptor);
 
-        //        unsigned int *hashes;
+        if (descriptor.isContinuous()) {
+                for (int k = 0; k < 450; ++k) {
+                        vector<float> vecrow;
+                        vecrow.assign((float*)descriptor.row(k).data, (float*)descriptor.row(k).data + 128);
+                        queryvec.push_back(vecrow);
+                }
+        }
+
         unsigned int hash;
-        vector<float> array;
         for (int x = 0; x < 450; x++) {
 //                cout << "in Query for loop x = " << x << endl;
-                newKP.clear();
-                newKP.push_back(keypoints.at(x));
-                detector->compute(srcImg, newKP, descriptor);
 
-                if (descriptor.isContinuous()) {
-                        array.clear();
-                        array.assign((float*)descriptor.data, (float*)descriptor.data + descriptor.total());
-                }
+                vector<float> array = vecminus(queryvec.at(x), _meanvec, 128);
                 //                for (auto i : array) {
                 //                        cout << i << ", ";
                 //                }
@@ -218,15 +219,18 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
                         hash = 0;
                         //                        cout << "srp address: " << _srp << endl;
                         //                        cout << "hash address: " << hashes << endl;
-                        for (int x = 0; x < _srp->_numhashes; x++) {
+                        for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-                                hash += hashes[x] * pow(2, (_srp->_numhashes - x - 1));
+                                cout << hashes[n] << "";
+                                hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
                         }
                         query[m] = hash;
+                        cout << "----";
 //                        cout << "Query insert successful" << endl;
                         delete(_srp);
                         delete [] hashes;
                 }
+                cout << endl;
                 unsigned int *result = new unsigned int[top_k];
                 _lsh->top_k(1, top_k, query, result);
                 // Step 4: Update the score of the nearest neighbors.
