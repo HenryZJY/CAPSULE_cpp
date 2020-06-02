@@ -33,25 +33,27 @@ unsigned int Extractor::compute(vector<string> files) {
                 std::vector<KeyPoint> keypoints;
                 detector->detect(srcImg, keypoints);
                 int numPoints = keypoints.size();
-                cout << keypoints.size();
+//                cout << keypoints.size();
 
                 if (numPoints < 450) {
-                        cout << "No 450 keypoints available" << endl;
+//                        cout << "No 450 keypoints available" << endl;
                         continue;
                 }
 
                 Mat descriptor;
                 detector->compute(srcImg, keypoints, descriptor);
                 descriptor.row(0);
+                id += 1;
                 if(descriptor.isContinuous()) {
                         for (int l = 0; l < 450; l++) {
                                 vector<float> row;
                                 row.assign((float*)descriptor.row(l).data, (float*)descriptor.row(l).data + 128);
-//                                _vecmap[row] = id;
+                                // Store the id of the image at the end of each vector.
+                                row.push_back(id);
                                 _featureMT.push_back(row);
                         }
                 }
-                id += 1;
+
         }
 //        cout << numPoints << endl;
 
@@ -88,7 +90,7 @@ unsigned int Extractor::compute(vector<string> files) {
 //                cout << i << " ";
 //        }
 //        cout << endl;
-
+        cout << "Compute Done with " << id << " images" << endl;
         return 0;
 }
 
@@ -98,7 +100,9 @@ unsigned int Extractor::preprocessing() {
 
         for (int x = 0; x < 10; x++) {
                 vector<float> array = _featureMT.at(x);
-                unsigned int imgID =  0;
+                // Find and remove the image ID
+                unsigned int imgID = array.back();
+                array.pop_back();
                 if (x % 200 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
 
@@ -137,7 +141,7 @@ unsigned int Extractor::preprocessing() {
                 for (int i = 0; i < _L; i++)
                         cout << hashlst[i] << " ";
                 cout << endl;
-                //                cout << "Before inserting " << endl;
+                cout << "Inserting image: " << imgID << endl;
                 _lsh ->insert(imgID, hashlst);
                 //                cout << "lsh insert successful" << endl;
         }
