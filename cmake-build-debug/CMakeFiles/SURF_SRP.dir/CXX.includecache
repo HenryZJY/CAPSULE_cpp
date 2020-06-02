@@ -34,6 +34,10 @@ opencv2/features2d.hpp
 opencv2/xfeatures2d.hpp
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/opencv2/xfeatures2d.hpp
 
+/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/LSH.cpp
+LSH.h
+/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/LSH.h
+
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/LSH.h
 Reservoir.h
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Reservoir.h
@@ -43,6 +47,10 @@ omp.h
 -
 vector
 -
+
+/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Reservoir.cpp
+Reservoir.h
+/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Reservoir.h
 
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Reservoir.h
 config.h

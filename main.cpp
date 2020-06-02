@@ -135,11 +135,11 @@ main() {
 //                        cout << umap[top_k[i]] << endl;
 //                }
 
-//                cout << "Querying " << query << endl;
-//                if ((match = extractor.query(query, 20)) != -1) {
-//                        cout << "Match is " << umap[match] << endl;
-//                        cout << endl;
-//                }
+                cout << "Querying " << query << endl;
+                if ((match = extractor.query(query, 20)) != -1) {
+                        cout << "Match is " << extractor._namemap[match] << endl;
+                        cout << endl;
+                }
         }
 
         return 0;

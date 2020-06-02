@@ -121,7 +121,7 @@ unsigned int Extractor::preprocessing() {
                 unsigned int imgID = array.back();
                 array.pop_back();
                 array = vecminus(array, _meanvec, 128);
-                if (x % 200 == 0)
+                if (x % 225 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
 
                 // Old way of computing each keypoints separately
@@ -135,11 +135,11 @@ unsigned int Extractor::preprocessing() {
                 // End of Old way
 
 
-                cout << "Single vector here: ";
-                for (auto i : array) {
-                        cout << i << ", ";
-                }
-                cout << endl << " Vector Size: " <<array.size() << endl;
+//                cout << "Single vector here: ";
+//                for (auto i : array) {
+//                        cout << i << ", ";
+//                }
+//                cout << endl << " Vector Size: " <<array.size() << endl;
 
                 // Step 3: Hash each 128-dimensional feature here
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
@@ -149,17 +149,17 @@ unsigned int Extractor::preprocessing() {
 
                         for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-                                cout << hashes[n] << "";
+//                                cout << hashes[n] << "";
                                 hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
                         }
                         hashlst[m] = hash;
                         delete(_srp);
                         delete [] hashes;
-                        cout << "----";
+//                        cout << "----";
                 }
+//                cout << endl;
 //                for (int i = 0; i < _L; i++)
 //                        cout << hashlst[i] << " ";
-                cout << endl;
 //                cout << "Inserting image: " << imgID << endl;
                 _lsh ->insert(imgID, hashlst);
                 //                cout << "lsh insert successful" << endl;
@@ -221,20 +221,26 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
                         //                        cout << "hash address: " << hashes << endl;
                         for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-                                cout << hashes[n] << "";
+//                                cout << hashes[n] << "";
                                 hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
                         }
                         query[m] = hash;
-                        cout << "----";
+//                        cout << "----";
 //                        cout << "Query insert successful" << endl;
                         delete(_srp);
                         delete [] hashes;
                 }
-                cout << endl;
-                unsigned int *result = new unsigned int[top_k];
-                _lsh->top_k(1, top_k, query, result);
+//                cout << "Before retrieve" << endl;
+
+                unsigned int *result = new unsigned int[_L * RESERVOIR_SIZE];
+                _lsh->retrieve(1, query, result);
+//                _lsh->top_k(1, top_k, query, result);
+
                 // Step 4: Update the score of the nearest neighbors.
-                for (int i = 0; i < top_k; ++i) {
+                // TODO: Check the below size.
+//                cout << "Retrieved bucket size: " << *(&result + 1) - result << endl;
+                for (int i = 0; i < _L * RESERVOIR_SIZE; ++i) {
+//                        cout << result[i] << "  ";
                         if (_score.count(result[i]) == 0) {
                                 _score[result[i]] = 0;
                         }
@@ -246,13 +252,15 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
                 delete [] result;
         }
         // Sort the score map
-        vector<pair<int, int> > freq_arr(_score.begin(), _score.end());
+        vector<pair<unsigned int, unsigned int> > freq_arr(_score.begin(), _score.end());
         sort(freq_arr.begin(), freq_arr.end(), comparePair());
 
         _score.clear();
-        if (freq_arr[0].first == -1)
+        if (freq_arr[0].first == -1) {
+                cout << endl << "Most match score is: " << freq_arr[1].second << endl;
                 return freq_arr[1].first;
-        cout << "Most match score is: " << freq_arr[0].second << endl;
+        }
+        cout << endl << "Most match score is: " << freq_arr[0].second << endl;
         return freq_arr[0].first;
 }
 

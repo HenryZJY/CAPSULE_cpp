@@ -47,7 +47,7 @@ private:
 
 public:
     LSH *_lsh;
-    unordered_map<int, int> _score;
+    unordered_map<unsigned int, int> _score;
     unordered_map<int, string> _namemap;
     vector<vector<float>> _featureMT;
     /*Constructor */
