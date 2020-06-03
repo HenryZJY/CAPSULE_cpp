@@ -34,10 +34,6 @@ opencv2/features2d.hpp
 opencv2/xfeatures2d.hpp
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/opencv2/xfeatures2d.hpp
 
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/LSH.cpp
-LSH.h
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/LSH.h
-
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/LSH.h
 Reservoir.h
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Reservoir.h
@@ -47,10 +43,6 @@ omp.h
 -
 vector
 -
-
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Reservoir.cpp
-Reservoir.h
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Reservoir.h
 
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Reservoir.h
 config.h
@@ -63,28 +55,6 @@ omp.h
 -
 
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/config.h
-
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/main.cpp
-iostream
--
-Extractor.h
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Extractor.h
-glob.h
--
-string.h
--
-vector
--
-stdexcept
--
-string
--
-sstream
--
-LSH.h
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/LSH.h
-unordered_map
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/unordered_map
 
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/srpHash.h
 vector

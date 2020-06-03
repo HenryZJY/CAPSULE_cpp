@@ -115,12 +115,22 @@ unsigned int Extractor::preprocessing() {
         unsigned int *hashlst = new unsigned int[_L];
         unsigned int hash;
 
+        float *testvec = new float[128];
+        for (int i = 0; i < 128; ++i) {
+                testvec[i] = 0;
+        }
+
         for (int x = 0; x < _featureMT.size(); x++) {
                 vector<float> array = _featureMT.at(x);
                 // Find and remove the image ID
                 unsigned int imgID = array.back();
                 array.pop_back();
                 array = vecminus(array, _meanvec, 128);
+                //TODO: Test data centering
+                for (int j = 0; j < 128; ++j) {
+                        testvec[j] += array.at(j);
+                }
+
                 if (x % 225 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
 
@@ -157,13 +167,19 @@ unsigned int Extractor::preprocessing() {
                         delete [] hashes;
 //                        cout << "----";
                 }
-//                cout << endl;
+
 //                for (int i = 0; i < _L; i++)
-//                        cout << hashlst[i] << " ";
+//                        cout << hashlst[i] << "----";
+//                cout << endl << endl;
 //                cout << "Inserting image: " << imgID << endl;
                 _lsh ->insert(imgID, hashlst);
                 //                cout << "lsh insert successful" << endl;
         }
+        cout << "Data centered?" << endl;
+        for (int k = 0; k < 128; ++k) {
+                cout << testvec[k] << "  ";
+        }
+        cout << endl;
         return 0;
 }
 
@@ -237,8 +253,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
 //                _lsh->top_k(1, top_k, query, result);
 
                 // Step 4: Update the score of the nearest neighbors.
-                // TODO: Check the below size.
-//                cout << "Retrieved bucket size: " << *(&result + 1) - result << endl;
+
                 for (int i = 0; i < _L * RESERVOIR_SIZE; ++i) {
 //                        cout << result[i] << "  ";
                         if (_score.count(result[i]) == 0) {
