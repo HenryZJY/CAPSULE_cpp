@@ -6,16 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Extractor.cpp
-Extractor.h
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Extractor.h
-algorithm
--
-random
--
-cmath
-/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/cmath
-
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Extractor.h
 iostream
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/iostream
@@ -55,6 +45,28 @@ omp.h
 -
 
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/config.h
+
+/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/main.cpp
+iostream
+-
+Extractor.h
+/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/Extractor.h
+glob.h
+-
+string.h
+-
+vector
+-
+stdexcept
+-
+string
+-
+sstream
+-
+LSH.h
+/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/LSH.h
+unordered_map
+/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/unordered_map
 
 /Users/henryzjy/Desktop/Projects/CAPSULE_cpp/srpHash.h
 vector

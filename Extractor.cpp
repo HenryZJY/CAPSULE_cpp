@@ -47,7 +47,7 @@ unsigned int Extractor::compute(vector<string> files) {
                 // Step 2: Compute feature
                 Mat descriptor;
                 detector->compute(srcImg, keypoints, descriptor);
-                descriptor.row(0);
+//                cout << "Original descriptor of" << filePath  << " ---- "<< descriptor << endl;
                 cout << "Storing id is "<< id << endl;
                 if(descriptor.isContinuous()) {
                         for (int l = 0; l < 450; l++) {
@@ -66,9 +66,9 @@ unsigned int Extractor::compute(vector<string> files) {
 
         cout << "Compute Done with " << id << " images" << endl;
         // Calculate the mean vector
-        cout << "Sum vector is ";
+//        cout << "Sum vector is ";
         for (int k = 0; k < 128; ++k) {
-                cout << sumvec[k] << " ";
+//                cout << sumvec[k] << " ";
                 _meanvec.push_back(sumvec[k] / _featureMT.size());
         }
         cout << endl;
@@ -133,9 +133,9 @@ unsigned int Extractor::preprocessing() {
                         testvec[j] += array.at(j);
                 }
 
-//                if (x % 225 == 0)
-//                        cout << "in for loop image id = " << imgID << " x = " << x << endl;
-                cout << " Current image is " << _namemap[imgID] << endl;
+                if (x % 225 == 0)
+                        cout << "in for loop image id = " << imgID << " x = " << x << endl;
+//                cout << " Current image is " << _namemap[imgID] << endl;
 
                 // Old way of computing each keypoints separately
                 //                newKP.clear();
@@ -162,25 +162,25 @@ unsigned int Extractor::preprocessing() {
 
                         for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-                                cout << hashes[n] << "";
+//                                cout << hashes[n] << "";
                                 hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
                         }
                         hashlst[m] = hash;
                         delete(_srp);
                         delete [] hashes;
-                        cout << "----";
+//                        cout << "----";
                 }
 
 //                for (int i = 0; i < _L; i++)
 //                        cout << hashlst[i] << "----";
-                cout << endl << endl;
+//                cout << endl << endl;
 //                cout << "Inserting image: " << imgID << endl;
                 _lsh ->insert(imgID, hashlst);
                 //                cout << "lsh insert successful" << endl;
         }
         cout << "Data centered?" << endl;
         for (int k = 0; k < 128; ++k) {
-                cout << testvec[k];
+                cout << testvec[k] << "  ";
 //                cout << testvec[k] + _meanvec.at(k) * _featureMT.size() << "  ";
         }
         cout << endl;
@@ -212,6 +212,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
         vector<vector<float>> queryvec;
         Mat descriptor;
         detector->compute(srcImg, keypoints, descriptor);
+//        cout << "Original descriptor of" << filePath  << " ---- "<< descriptor << endl;
 
         if (descriptor.isContinuous()) {
                 for (int k = 0; k < 450; ++k) {
@@ -241,16 +242,16 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
                         //                        cout << "hash address: " << hashes << endl;
                         for (int n = 0; n < _srp->_numhashes; n++) {
                                 // Convert to an interger
-                                cout << hashes[n] << "";
+//                                cout << hashes[n] << "";
                                 hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
                         }
                         query[m] = hash;
-                        cout << "----";
+//                        cout << "----";
 //                        cout << "Query insert successful" << endl;
                         delete(_srp);
                         delete [] hashes;
                 }
-                cout << endl << endl;
+//                cout << endl << endl;
 //                cout << "Before retrieve" << endl;
 
                 unsigned int *result = new unsigned int[_L * RESERVOIR_SIZE];
