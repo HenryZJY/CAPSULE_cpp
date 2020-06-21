@@ -43,6 +43,7 @@ private:
     Ptr<SIFT> detector = SIFT::create(450);
     unsigned int _L;
     vector<float> _meanvec;     // The mean vector
+    vector<srpHash> _storesrp;
 //    unordered_map<vector<float>, int> _vecmap;
 
 public:

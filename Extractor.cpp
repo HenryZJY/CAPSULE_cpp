@@ -157,6 +157,7 @@ unsigned int Extractor::preprocessing() {
                 // Step 3: Hash each 128-dimensional feature here
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
                         srpHash *_srp = new srpHash(128, _K, 1);
+                        _storesrp.push_back(*_srp);
                         unsigned int *hashes = _srp->getHash(array, 450);
                         hash = 0;
 
@@ -235,20 +236,19 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
                 // Step 3: Hash each 128-dimensional feature here
                 unsigned int *query = new unsigned int[_L];
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
-                        srpHash *_srp = new srpHash(128, _K, 1);
-                        unsigned int *hashes = _srp->getHash(array, 450);
+                        srpHash srp = _storesrp.at(m);
+                        unsigned int *hashes = srp.getHash(array, 450);
                         hash = 0;
                         //                        cout << "srp address: " << _srp << endl;
                         //                        cout << "hash address: " << hashes << endl;
-                        for (int n = 0; n < _srp->_numhashes; n++) {
+                        for (int n = 0; n < srp._numhashes; n++) {
                                 // Convert to an interger
 //                                cout << hashes[n] << "";
-                                hash += hashes[n] * pow(2, (_srp->_numhashes - n - 1));
+                                hash += hashes[n] * pow(2, (srp._numhashes - n - 1));
                         }
                         query[m] = hash;
 //                        cout << "----";
 //                        cout << "Query insert successful" << endl;
-                        delete(_srp);
                         delete [] hashes;
                 }
 //                cout << endl << endl;

@@ -124,7 +124,7 @@ main() {
 
         // Query
         extractor._namemap[-1] = "BOOM";
-        vector<string> queries = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/query/3_1_test.jpg");
+        vector<string> queries = glob("/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/query/*.jpg");
         for (auto query : queries) {
                 unsigned int match;
 
