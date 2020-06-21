@@ -260,7 +260,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
 
                 unsigned int *result = new unsigned int[_L * RESERVOIR_SIZE];
                 _lsh->retrieve(1, query, result);
-//                _lsh->top_k(1, top_k, query, result);
+//                _lsh->top_k(1, top_k, small_query, result);
 
                 // Step 4: Update the score of the nearest neighbors.
 

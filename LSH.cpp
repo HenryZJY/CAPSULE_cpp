@@ -37,9 +37,9 @@ void LSH::insert(unsigned int item, unsigned int *hashes) {
 void LSH::retrieve(unsigned int num_query, unsigned int *hashes, unsigned int *results_buffer) {
 
 #pragma omp parallel for default(none) shared(num_query, hashes, results_buffer)
-        for (size_t query = 0; query < num_query; query++) { // Iterate through each query.
+        for (size_t query = 0; query < num_query; query++) { // Iterate through each small_query.
                 for (size_t table = 0; table < L; table++) {     // Iterate through each table.
-                        // Calculate the location in the hash array for the given query and table.
+                        // Calculate the location in the hash array for the given small_query and table.
                         size_t loc = query * L + table;
                         // Retrieve the contents of the reservoir and copy them into the results buffer.
                         reservoirs[table][hashes[loc]].retrieve(results_buffer + loc * reservoir_size);
@@ -56,7 +56,7 @@ void LSH::top_k(unsigned int num_query, unsigned int top_k, unsigned int *hashes
         // Extract the reservoirs given by the hash indices.
         this->retrieve(num_query, hashes, extracted_reservoirs);
 
-        // A block is total number items extracted foreach query.
+        // A block is total number items extracted foreach small_query.
         unsigned int block = L * reservoir_size;
 
         for (size_t query = 0; query < num_query; query++) {

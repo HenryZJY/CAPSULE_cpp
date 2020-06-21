@@ -64,15 +64,15 @@ public:
      *
      * @param num_query: the number of queries.
      *
-     * @param hashes: an pointer to an array of hash indices foreach query. The length of this array
+     * @param hashes: an pointer to an array of hash indices foreach small_query. The length of this array
      * is L * num_query, where L is the number of hash tables. The i-th block of L hash
      * indices corresponds to the hash indices of the i-th vector foreach hash table.
      *
      * @param results_buffer: a pointer to an array for storing the contents of the reservoirs. This
      * function selects the reservoir given by each hash index and copies its contents into the
      * buffer. The length of the results buffer should be num_query * L * reservoir_size because
-     * each query will have L hash indices which will each correspond to a reservoir. For the i-th
-     * query, the start of the reservoir for the j-th table for that query is given by
+     * each small_query will have L hash indices which will each correspond to a reservoir. For the i-th
+     * small_query, the start of the reservoir for the j-th table for that small_query is given by
      * results_buffer + i * L * reservoir_size + j * reservoir_size.
      */
     void retrieve(unsigned int num_query, unsigned int *hashes, unsigned int *results_buffer);
@@ -80,20 +80,20 @@ public:
     /**
      * This function finds an estimation of the nearest neighbors for a set of queries and copies
      * them into a buffer. If there are fewer unique items in the reservoirs than the value of
-     * top_k for a query, then the selection array is filled in with the maximum value of an
+     * top_k for a small_query, then the selection array is filled in with the maximum value of an
      * unsigned int for the missing nearest neighbors.
      *
      * @param num_query: the number of queries.
      *
-     * @param top_k: the number of nearest neighbors to find foreach query.
+     * @param top_k: the number of nearest neighbors to find foreach small_query.
      *
-     * @param hashes: an pointer to an array of hash indices foreach query. The length of this array
+     * @param hashes: an pointer to an array of hash indices foreach small_query. The length of this array
      * is L * num_query, where L is the number of hash tables. The i-th block of L hash
      * indices corresponds to the hash indices of the i-th vector foreach hash table.
      *
-     * @param selection: a pointer to an array for storing top_k nearest neighbors foreach query.
+     * @param selection: a pointer to an array for storing top_k nearest neighbors foreach small_query.
      * This array should have a length of num_query * top_k. The j-th nearest neighbor for the i-th
-     * query is given by selection[i * top_k + j].
+     * small_query is given by selection[i * top_k + j].
      */
     void top_k(unsigned int num_query, unsigned int top_k, unsigned int *hashes,
                unsigned int *selection);
