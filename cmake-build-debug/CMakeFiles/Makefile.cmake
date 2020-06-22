@@ -39,8 +39,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.15.3/CMakeCCompiler.cmake"
   "CMakeFiles/3.15.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.15.3/CMakeSystem.cmake"
-  "CMakeFiles/FindOpenMP/OpenMPCheckVersion.c"
-  "CMakeFiles/FindOpenMP/OpenMPCheckVersion.cpp"
   "/Users/henryzjy/Desktop/Projects/OpenCV/build_nonfree_opencv/OpenCVConfig-version.cmake"
   "/Users/henryzjy/Desktop/Projects/OpenCV/build_nonfree_opencv/OpenCVConfig.cmake"
   "/Users/henryzjy/Desktop/Projects/OpenCV/build_nonfree_opencv/OpenCVModules.cmake"

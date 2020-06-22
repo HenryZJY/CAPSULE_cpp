@@ -22,9 +22,8 @@ Extractor::Extractor(int numHashes, LSH *lsh, unsigned int L ) {
 
 
 unsigned int Extractor::compute(vector<string> files) {
-        // Step 1: Detect the keypoints using SURF Detector
-        //        double minHessian = 250;
-        //        Ptr<SURF> detector = SURF::create(minHessian);
+
+
         unsigned int id = 0;
         float *sumvec = new float[128];
         for (int i = 0; i < 128; ++i) {
@@ -38,16 +37,19 @@ unsigned int Extractor::compute(vector<string> files) {
                         std::cout << "Could not open or find the image!\n" << std::endl;
                         exit(-1);
                 }
+                // Step 1: Detect the keypoints using SIFT Detector
                 std::vector<KeyPoint> keypoints;
                 detector->detect(srcImg, keypoints);
                 int numPoints = keypoints.size();
 //                cout << keypoints.size();
 
+                // Case when NOT enough KeyPoints
                 if (numPoints < 450) {
 //                        cout << "No 450 keypoints available" << endl;
                         continue;
                 }
 
+                // Case when enough KeyPoints
                 // Step 2: Compute feature
                 Mat descriptor;
                 detector->compute(srcImg, keypoints, descriptor);
@@ -69,10 +71,9 @@ unsigned int Extractor::compute(vector<string> files) {
         }
 
         cout << "Compute Done with " << id << " images" << endl;
+
         // Calculate the mean vector
-//        cout << "Sum vector is ";
         for (int k = 0; k < 128; ++k) {
-//                cout << sumvec[k] << " ";
                 _meanvec.push_back(sumvec[k] / _featureMT.size());
         }
         cout << endl;
@@ -80,30 +81,6 @@ unsigned int Extractor::compute(vector<string> files) {
 
 
         return 0;
-//        cout << numPoints << endl;
-
-        // Draw keypoints
-        //        Mat img_keypoints;
-        //        drawKeypoints(_srcImg, keypoints, img_keypoints);
-        //
-        //        //-- Show detected (drawn) keypoints
-        //        imshow("SURF Keypoints", img_keypoints);
-        //
-        //        waitKey();
-
-        // Case when NOT enough KeyPoints
-
-
-        // Case when enough KeyPoints
-        // Vector for random selection
-//        auto rd = std::random_device {};
-//        auto rng = default_random_engine {rd()};
-//        vector<int> arr;
-//        arr.reserve(numPoints);
-//        for (int i = 0; i < numPoints; i++) {
-//                arr.push_back(i);
-//        }
-//        shuffle(arr.begin(), arr.end(), rng);
 
 
         // Calculate mean vector to center the data
@@ -137,9 +114,8 @@ unsigned int Extractor::preprocessing() {
                         testvec[j] += array.at(j);
                 }
 
-                if (x % 225 == 0)
+                if (x % 450 == 0)
                         cout << "in for loop image id = " << imgID << " x = " << x << endl;
-//                cout << " Current image is " << _namemap[imgID] << endl;
 
                 // Old way of computing each keypoints separately
                 //                newKP.clear();
@@ -179,7 +155,6 @@ unsigned int Extractor::preprocessing() {
 //                cout << endl << endl;
 //                cout << "Inserting image: " << imgID << endl;
                 _lsh ->insert(imgID, hashlst);
-                //                cout << "lsh insert successful" << endl;
         }
         cout << "Data centered?" << endl;
         for (int k = 0; k < 128; ++k) {
@@ -191,9 +166,8 @@ unsigned int Extractor::preprocessing() {
 }
 
 unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
-        // Step 1: Detect the keypoints using SURF Detector
-        //        double minHessian = 250;
-        //        Ptr<SURF> detector = SURF::create(minHessian);
+        // Step 1: Detect the keypoints using SIFT Detector
+
         Mat srcImg = imread(samples::findFile(filePath), IMREAD_COLOR);
         if (srcImg.empty()) {
                 std::cout << "Could not open or find the image!\n" << std::endl;
@@ -229,30 +203,23 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
         for (int x = 0; x < 450; x++) {
 //                cout << "in Query for loop x = " << x << endl;
 
+                // Center the query by deducting mean vector.
                 vector<float> array = vecminus(queryvec.at(x), _meanvec, 128);
-                //                for (auto i : array) {
-                //                        cout << i << ", ";
-                //                }
-                //                cout << "\nArray size:" << array.size() << endl;
 
                 // Step 3: Hash each 128-dimensional feature here
                 unsigned int *query = new unsigned int[_L];
                 for (int m = 0; m < _L; m++) {      // For lsh, compute each table for each feature
-//                        cout << "before getting srp from vector" << endl;
                         srpHash *srp = _storesrp.at(m);
-//                        cout << "after getting srp from vector" << endl;
+
                         unsigned int *hashes = srp->getHash(array, 450);
                         hash = 0;
                         //                        cout << "srp address: " << _srp << endl;
                         //                        cout << "hash address: " << hashes << endl;
                         for (int n = 0; n < srp->_numhashes; n++) {
                                 // Convert to an interger
-//                                cout << hashes[n] << "";
                                 hash += hashes[n] * pow(2, (srp->_numhashes - n - 1));
                         }
                         query[m] = hash;
-//                        cout << "----";
-//                        cout << "Query insert successful" << endl;
                         delete [] hashes;
                 }
 //                cout << endl << endl;
@@ -260,10 +227,9 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
 
                 unsigned int *result = new unsigned int[_L * RESERVOIR_SIZE];
                 _lsh->retrieve(1, query, result);
-//                _lsh->top_k(1, top_k, small_query, result);
+
 
                 // Step 4: Update the score of the nearest neighbors.
-
                 for (int i = 0; i < _L * RESERVOIR_SIZE; ++i) {
 //                        cout << result[i] << "  ";
                         if (_score.count(result[i]) == 0) {

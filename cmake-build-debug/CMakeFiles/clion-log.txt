@@ -1,7 +1,4 @@
 /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -G "CodeBlocks - Unix Makefiles" /Users/henryzjy/Desktop/Projects/CAPSULE_cpp
--- Found OpenMP_C: -fopenmp=libomp -Wno-unused-command-line-argument (found version "4.5") 
--- Found OpenMP_CXX: -fopenmp=libomp -Wno-unused-command-line-argument (found version "4.5") 
--- Found OpenMP: TRUE (found version "4.5")  
 FOUND OPENMP
 -- Configuring done
 -- Generating done

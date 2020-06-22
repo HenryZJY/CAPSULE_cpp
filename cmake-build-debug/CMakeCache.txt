@@ -14,6 +14,12 @@
 # EXTERNAL cache entries
 ########################
 
+//Value Computed by CMake
+CAPSULE_cpp_BINARY_DIR:STATIC=/Users/henryzjy/Desktop/Projects/CAPSULE_cpp/cmake-build-debug
+
+//Value Computed by CMake
+CAPSULE_cpp_SOURCE_DIR:STATIC=/Users/henryzjy/Desktop/Projects/CAPSULE_cpp
+
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
@@ -163,7 +169,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=SURF_SRP
+CMAKE_PROJECT_NAME:STATIC=CAPSULE_cpp
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -402,11 +408,11 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding OpenCV
 FIND_PACKAGE_MESSAGE_DETAILS_OpenCV:INTERNAL=[/Users/henryzjy/Desktop/Projects/OpenCV/build_nonfree_opencv][v4.3.0()]
 //Details about finding OpenMP
-FIND_PACKAGE_MESSAGE_DETAILS_OpenMP:INTERNAL=[TRUE][TRUE][c ][v4.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenMP:INTERNAL=[TRUE][TRUE][c ][v()]
 //Details about finding OpenMP_C
-FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_C:INTERNAL=[-fopenmp=libomp -Wno-unused-command-line-argument][libomp;libgomp;libiomp5][libomp;libgomp;libiomp5][libomp;libgomp;libiomp5][v4.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_C:INTERNAL=[-fopenmp=libomp -Wno-unused-command-line-argument][libomp;libgomp;libiomp5][libomp;libgomp;libiomp5][libomp;libgomp;libiomp5][v()]
 //Details about finding OpenMP_CXX
-FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp=libomp -Wno-unused-command-line-argument][libomp;libgomp;libiomp5][libomp;libgomp;libiomp5][libomp;libgomp;libiomp5][v4.5()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp=libomp -Wno-unused-command-line-argument][libomp;libgomp;libiomp5][libomp;libgomp;libiomp5][libomp;libgomp;libiomp5][v()]
 //ADVANCED property for variable: OpenMP_CXX_FLAGS
 OpenMP_CXX_FLAGS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OpenMP_CXX_LIB_NAMES
