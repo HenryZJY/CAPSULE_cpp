@@ -282,7 +282,7 @@ unsigned int Extractor::query(const String &filePath, unsigned int top_k) {
 
         _score.clear();
         if (freq_arr[0].first == -1) {
-                cout << endl << "Most match score is: " << freq_arr[1].second << endl;
+                cout << "Most match score is: " << freq_arr[1].second << endl;
                 return freq_arr[1].first;
         }
         cout << endl << "Most match score is: " << freq_arr[0].second << endl;
